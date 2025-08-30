@@ -613,14 +613,19 @@ def api_order_verify_delivery():
 
 @app.route('/create-admin')
 def create_admin():
-    if not Admin.query.filter_by(username="admin").first():
-        hashed_pw = bcrypt.generate_password_hash("admin123").decode("utf-8")
-        admin = Admin(username="admin", password=hashed_pw)
+    # set your default email + password here
+    email = "admin@gmail.com"
+    pw = "admin123"
+
+    if not Admin.query.filter_by(email=email).first():
+        hashed = generate_password_hash(pw)
+        admin = Admin(email=email, password=hashed)
         db.session.add(admin)
         db.session.commit()
-        return "✅ Admin created!"
+        return f"✅ Admin created: {email}"
     return "⚡ Admin already exists"
 
 # =====================================================
 if __name__ == '__main__':
     app.run(debug=True)
+
